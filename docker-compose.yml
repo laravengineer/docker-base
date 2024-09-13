@@ -1,6 +1,9 @@
 services:
     # Project
     app:
+        container_name: "${APP_NAME}_app"
+        environment:
+            APP_NAME: ${APP_NAME}
         build:
             context: .
             dockerfile: Dockerfile
@@ -20,6 +23,9 @@ services:
 
     # Nginx
     nginx:
+        container_name: "${APP_NAME}_nginx"
+        environment:
+            APP_NAME: ${APP_NAME}
         image: nginx:alpine
         restart: unless-stopped
         ports:
@@ -32,21 +38,24 @@ services:
 
     # MySQL
     db:
+        container_name: "${APP_NAME}_db"
         image: mysql:8.0
         platform: linux/x86_64
         restart: unless-stopped
         environment:
-            MYSQL_DATABASE: ${DB_DATABASE:-app}
-            MYSQL_ROOT_PASSWORD: ${DB_PASSWORD:-root}
+            MYSQL_DATABASE: "${APP_NAME}_db"
+            MYSQL_ROOT_PASSWORD: root
+            APP_NAME: ${APP_NAME}
         volumes:
             - ./.docker/mysql/dbdata:/var/lib/mysql
         ports:
-            - "3300:3306"
+            - "3306:3306"
         networks:
             - laravel
 
     # PHPMyAdmin
     phpmyadmin:
+        container_name: "${APP_NAME}_phpMyAdmin"
         image: phpmyadmin/phpmyadmin
         platform: linux/x86_64
         restart: unless-stopped
@@ -55,12 +64,16 @@ services:
         environment:
             PMA_HOST: db
             PMA_PORT: 3306
-            MYSQL_ROOT_PASSWORD: ${DB_PASSWORD:-root}
+            MYSQL_ROOT_PASSWORD: root
+            APP_NAME: ${APP_NAME}
         networks:
             - laravel
 
     # Redis
     redis:
+        container_name: "${APP_NAME}_redis"
+        environment:
+            APP_NAME: ${APP_NAME}
         image: redis:latest
         networks:
             - laravel
