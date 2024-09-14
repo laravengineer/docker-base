@@ -34,4 +34,10 @@ done
 
 echo "Container ${APP_NAME}_app is now running!"
 
-docker exec -it "${APP_NAME}_app" bash -c "composer create-project laravel/laravel ."
+docker exec -it "${APP_NAME}_app" bash -c "composer create-project --prefer-dist laravel/laravel /tmp/${APP_NAME}"
+
+docker exec -it "${APP_NAME}_app" bash -c "mv /tmp/${APP_NAME}/* /tmp/${APP_NAME}/.* ./ 2>/dev/null || true"
+
+docker exec -it "${APP_NAME}_app" bash -c "rm -rf /tmp/${APP_NAME}"
+
+echo "Laravel project successfully created in the container!"
