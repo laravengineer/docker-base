@@ -15,7 +15,7 @@ services:
         ports:
             - "${VITE_PORT}:${VITE_PORT}"
         volumes:
-            - ./:/var/www
+            - .:/var/www
         depends_on:
             - redis
         networks:
