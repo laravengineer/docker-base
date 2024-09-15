@@ -4,13 +4,13 @@ services:
         container_name: "${APP_NAME}_app"
         environment:
             APP_NAME: ${APP_NAME}
+            HOST_IP: ${HOST_IP}
         build:
             context: .
             dockerfile: Dockerfile
             args:
               user: ${USER_NAME}
               uid: ${USER_UID}
-              HOST_IP: ${HOST_IP}
         restart: unless-stopped
         working_dir: /var/www/
         ports:
