@@ -10,10 +10,12 @@ services:
             args:
               user: ${USER_NAME}
               uid: ${USER_UID}
+              HOST_IP: ${HOST_IP}
         restart: unless-stopped
         working_dir: /var/www/
         ports:
             - "${VITE_PORT}:${VITE_PORT}"
+            - "9003:9003"
         volumes:
             - .:/var/www
         depends_on:
