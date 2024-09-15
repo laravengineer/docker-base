@@ -13,6 +13,23 @@ export USER_UID
 export APP_NAME
 export VITE_PORT
 
+# Obtain host IP dynamically
+if [[ "$OSTYPE" == "linux-gnu"* ]]; then
+    HOST_IP=$(ip route get 1 | awk '{print $7; exit}')
+elif [[ "$OSTYPE" == "darwin"* ]]; then
+    HOST_IP=$(ipconfig getifaddr en0)
+elif [[ "$OSTYPE" == "cygwin" || "$OSTYPE" == "msys" || "$OSTYPE" == "win32" ]]; then
+    HOST_IP=$(ipconfig | grep "IPv4 Address" | awk '{print $NF}' | head -n 1)
+else
+    echo "Unsupported OS type: $OSTYPE"
+    exit 1
+fi
+
+export HOST_IP
+
+# Add xdebug.client_host to environment
+echo "xdebug.client_host set to: $HOST_IP"
+
 # Function to check if the container exists
 check_container_exists() {
   container_name="${APP_NAME}_app"
@@ -28,7 +45,7 @@ if check_container_exists; then
 fi
 
 # Start the Docker container
-docker compose up -d
+docker compose up -d --build
 
 # Function to check if the container is running
 check_container_status() {

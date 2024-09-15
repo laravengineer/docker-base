@@ -4,6 +4,7 @@ services:
         container_name: "${APP_NAME}_app"
         environment:
             APP_NAME: ${APP_NAME}
+            HOST_IP: ${HOST_IP}
         build:
             context: .
             dockerfile: Dockerfile
@@ -14,6 +15,7 @@ services:
         working_dir: /var/www/
         ports:
             - "${VITE_PORT}:${VITE_PORT}"
+            - "9003:9003"
         volumes:
             - .:/var/www
         depends_on:
